@@ -9,9 +9,13 @@ import UIKit
 
 enum Typography {
     
-    static let bold = UIFont(name: "sf-pro-display-bold", size: UIFont.labelFontSize)
+    static let titleBold = UIFont.systemFont(ofSize: 32, weight: UIFont.Weight.bold)
     
-    static let medium = UIFont(name: "sf-pro-display-medium", size: UIFont.labelFontSize)
+    static let pokemonNameBold = UIFont.systemFont(ofSize: 26, weight: UIFont.Weight.bold)
+    
+    static let pokemonIdBold = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.bold)
+    
+    static let medium = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.light)
 
-    static let regular = UIFont(name: "sf-pro-display-regular", size: UIFont.labelFontSize)
+    static let regular = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
 }
