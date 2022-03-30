@@ -8,6 +8,10 @@
 import UIKit
 import SnapKit
 
+protocol HomeViewControllerDisplaying: AnyObject {
+    func displayTeste()
+}
+
 final class HomeViewController: UIViewController {
     
     func setupNavBar() {
@@ -81,6 +85,17 @@ final class HomeViewController: UIViewController {
         super.viewDidLoad()
         buildView()
     }
+    
+    private let interactor: HomeInteracting
+    
+    init(interactor: HomeInteracting) {
+        self.interactor = interactor
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 extension HomeViewController: ViewSetup {
@@ -152,5 +167,12 @@ extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 140
+    }
+}
+
+// MARK: - HomeViewControllerDisplaying
+extension HomeViewController: HomeViewControllerDisplaying {
+    func displayTeste() {
+        
     }
 }
