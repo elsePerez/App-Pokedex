@@ -1,0 +1,21 @@
+name: pokedex
+options: 
+  deploymentTarget: 
+    iOS: 15.0
+
+targets: 
+  pokedex:
+    type: application
+    platform: iOS
+    deploymentTarget: 
+      iOS: 15.0
+    sources: pokedex
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.pokedex
+
+schemes:
+  pokedex:
+    build: 
+      targets: 
+        pokedex: all
