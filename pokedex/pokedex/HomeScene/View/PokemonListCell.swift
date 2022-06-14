@@ -22,7 +22,7 @@ final class PokemonListCell: UITableViewCell {
     private lazy var imageBackGroundCell: UIImageView = {
         var image = UIImageView()
         image.clipsToBounds = true
-        image = UIImageView(image: UIImage(named: "cellBackground"))
+        image.image = Images.cellBackground.image
         image.tintColor = UIColor(red: 1.00, green: 1.00, blue: 1.00, alpha: 0.30)
         return image
     }()
@@ -47,7 +47,7 @@ final class PokemonListCell: UITableViewCell {
     private lazy var pokeballBackGroundCell: UIImageView = {
         var image = UIImageView()
         image.clipsToBounds = true
-        image = UIImageView(image: Images.pokeballBackground.image)
+        image.image = Images.pokeballBackground.image
         image.tintColor = UIColor(red: 1.00, green: 1.00, blue: 1.00, alpha: 0.30)
         return image
     }()
@@ -55,7 +55,6 @@ final class PokemonListCell: UITableViewCell {
     private lazy var pokemonImage: UIImageView = {
         var image = UIImageView()
         image.clipsToBounds = true
-        image = UIImageView(image: UIImage(named: "teste1"))
         return image
     }()
     
@@ -70,21 +69,18 @@ final class PokemonListCell: UITableViewCell {
         let label = UILabel()
         label.font = Typography.pokemonNameBold
         label.textColor = Colors.white.color
-        label.text = "Bulbasaur"
         return label
     }()
     
     private lazy var badgeOne: UIImageView = {
         var image = UIImageView()
         image.clipsToBounds = true
-        image = UIImageView(image: UIImage(named: "grass"))
         return image
     }()
     
     private lazy var badgeTwo: UIImageView = {
         var image = UIImageView()
         image.clipsToBounds = true
-        image = UIImageView(image: UIImage(named: "poison"))
         return image
     }()
     
@@ -96,18 +92,27 @@ final class PokemonListCell: UITableViewCell {
     
     private lazy var rootStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.backgroundColor = UIColor(red: 0.55, green: 0.75, blue: 0.54, alpha: 1.00)
         stackView.layer.cornerRadius = 10
         return stackView
     }()
     
-    func setup(pokemon: PokemonModel) {
-        pokemonId.text = "#\(pokemon.id)"
+    func setup(pokemon: PokemonCellModeling) {
+        pokemonId.text = pokemon.id
+        pokemonName.text = pokemon.name
+        badgeOne.image = pokemon.primaryType
+        badgeTwo.image = pokemon.secondaryType
+        pokemonImage.image = pokemon.image
+        rootStackView.backgroundColor = pokemon.backgroundColor
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         buildView()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        pokemonImage.image = nil
     }
     
     @available(*, unavailable)

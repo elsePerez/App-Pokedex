@@ -6,7 +6,7 @@
 //
 
 protocol HomePresenting: AnyObject {
-    func displayList(pokemons: [PokemonModel])
+    func displayList()
 }
 
 final class HomePresenter {
@@ -19,7 +19,7 @@ final class HomePresenter {
 }
 
 extension HomePresenter: HomePresenting {
-    func displayList(pokemons: [PokemonModel]) {
-        print(pokemons.count)
+    func displayList() {
+        viewController?.displayTeste()
     }
 }

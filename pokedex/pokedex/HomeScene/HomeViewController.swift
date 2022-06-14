@@ -184,12 +184,14 @@ extension HomeViewController: UITableViewDelegate {
 // MARK: - UITableViewDataSource
 extension HomeViewController: UITableViewDataSource {    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        5
+        9
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PokemonListCell.identifier, for: indexPath)
-        //        cell.selectionStyle = .none
+        guard let pokemonCell = cell as? PokemonListCell else { return UITableViewCell()}
+        pokemonCell.setup(pokemon: interactor.getContentCell(index: indexPath))
+        pokemonCell.selectionStyle = .none
         return cell
     }
     
@@ -201,6 +203,6 @@ extension HomeViewController: UITableViewDataSource {
 // MARK: - HomeViewControllerDisplaying
 extension HomeViewController: HomeViewControllerDisplaying {
     func displayTeste() {
-        
+        pokemonsTableView.reloadData()
     }
 }
