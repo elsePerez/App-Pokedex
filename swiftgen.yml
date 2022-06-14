@@ -1,0 +1,15 @@
+input_dir: pokedex/pokedex
+output_dir: pokedex/pokedex
+xcassets:
+  - inputs: DesignSystem/Colors.xcassets
+    outputs:
+      - templateName: swift5
+        output: Colors.swift
+        params:
+          enumName: Colors
+  - inputs: DesignSystem/Assets.xcassets
+    outputs:
+      - templateName: swift5
+        output: Images.swift
+        params:
+          enumName: "Images"

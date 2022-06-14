@@ -26,17 +26,17 @@ struct Training: Decodable, Equatable {
     let evYield: String
     let catchRate: CatchRate
     let baseFriendship: BaseFriendship
-    let baseExp: Int
+    let baseExp: Int?
     let growthRate: String
 }
 
 struct CatchRate: Decodable, Equatable {
-    let value: Int
+    let value: Int?
     let text: String
 }
 
 struct BaseFriendship: Decodable, Equatable {
-    let value: Int
+    let value: Int?
     let text: String
 }
 
@@ -47,8 +47,8 @@ struct Breedings: Decodable, Equatable {
 }
 
 struct Gender: Decodable, Equatable {
-    let male: Float
-    let female: Float
+    let male: Float?
+    let female: Float?
 }
 
 struct EggCycles: Decodable, Equatable {

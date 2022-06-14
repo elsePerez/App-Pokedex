@@ -13,28 +13,48 @@ protocol HomeViewControllerDisplaying: AnyObject {
 }
 
 final class HomeViewController: UIViewController {
+    private lazy var generationButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: Images.generationIcon.image,
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(generationButtonTapped))
+        button.tintColor = Colors.black.color
+        return button
+    }   ()
+    
+    private lazy var sortButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: Images.sortIcon.image,
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(sortButtonTapped))
+        button.tintColor = Colors.black.color
+        return button
+    }()
+    
+    private lazy var filterButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(image: Images.filterIcon.image,
+                                     style: .plain,
+                                     target: self,
+                                     action: #selector(filterButtonTapped))
+        button.tintColor = Colors.black.color
+        return button
+    }()
     
     func setupNavBar() {
-        let width = self.view.frame.width
-        let navigationBar = UINavigationBar(frame: CGRect(x: 0, y: self.view.safeAreaInsets.top, width: width, height: 44))
-        navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationBar.shadowImage = UIImage()
-        navigationBar.isTranslucent = true
-        self.view.addSubview(navigationBar)
-        let generationButton = UIBarButtonItem(image: UIImage(named: "generationIcon"), style: .plain, target: self, action: #selector(generationButtonTapped))
-        generationButton.tintColor = Colors.black
-        let sortButton = UIBarButtonItem(image: UIImage(named: "sortIcon"), style: .plain, target: self, action: #selector(sortButtonTapped))
-        sortButton.tintColor = Colors.black
-        let filterButton = UIBarButtonItem(image: UIImage(named: "filterIcon"), style: .plain, target: self, action: #selector(filterButtonTapped))
-        filterButton.tintColor = Colors.black
+        let navigationBar = navigationController?.navigationBar
+        navigationBar?.setBackgroundImage(UIImage(), for: .default)
+        navigationBar?.shadowImage = UIImage()
+        navigationBar?.isTranslucent = true
+        
         navigationItem.rightBarButtonItems = [filterButton, sortButton, generationButton]
-        navigationBar.setItems([navigationItem], animated: false)
     }
+    
+    private lazy var pokeballImage = UIImageView(image: Images.cutPokeballBackground.image)
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = Typography.titleBold
-        label.textColor = Colors.black
+        label.textColor = Colors.black.color
         label.text = "Pokédex"
         label.numberOfLines = 0
         return label
@@ -43,7 +63,7 @@ final class HomeViewController: UIViewController {
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.font = Typography.medium
-        label.textColor = Colors.gray
+        label.textColor = Colors.textGray.color
         label.text = "Search for Pokémon by name or using the National Pokédex number."
         label.numberOfLines = 0
         return label
@@ -52,8 +72,8 @@ final class HomeViewController: UIViewController {
     private lazy var searchBar: UISearchTextField = {
         let searchBar = UISearchTextField()
         searchBar.backgroundColor = .clear
-        searchBar.textColor = Colors.gray
-        searchBar.tintColor = Colors.gray
+        searchBar.textColor = Colors.textGray.color
+        searchBar.tintColor = Colors.textGray.color
         searchBar.placeholder = "What Pokémon are you looking for?"
         return searchBar
     }()
@@ -83,6 +103,7 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        interactor.fetchData()
         buildView()
     }
     
@@ -100,6 +121,12 @@ final class HomeViewController: UIViewController {
 
 extension HomeViewController: ViewSetup {
     func setupConstraints() {
+        pokeballImage.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaInsets.top)
+            $0.leading.equalToSuperview()
+            $0.trailing.equalToSuperview()
+        }
+        
         summaryTitleStackView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaInsets.top + 100)
             $0.leading.equalToSuperview().offset(40)
@@ -121,13 +148,14 @@ extension HomeViewController: ViewSetup {
     }
     
     func setupHierarchy() {
+        view.addSubview(pokeballImage)
         view.addSubview(summaryTitleStackView)
         view.addSubview(searchBar)
         view.addSubview(pokemonsTableView)
     }
     
     func setupStyles() {
-        view.backgroundColor = Colors.backgroundColor
+        view.backgroundColor = Colors.backgroundWhite.color
     }
 }
 
@@ -161,7 +189,7 @@ extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PokemonListCell.identifier, for: indexPath)
-//        cell.selectionStyle = .none
+        //        cell.selectionStyle = .none
         return cell
     }
     

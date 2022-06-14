@@ -47,7 +47,7 @@ final class PokemonListCell: UITableViewCell {
     private lazy var pokeballBackGroundCell: UIImageView = {
         var image = UIImageView()
         image.clipsToBounds = true
-        image = UIImageView(image: UIImage(named: "pokeballBackground"))
+        image = UIImageView(image: Images.pokeballBackground.image)
         image.tintColor = UIColor(red: 1.00, green: 1.00, blue: 1.00, alpha: 0.30)
         return image
     }()
@@ -61,7 +61,6 @@ final class PokemonListCell: UITableViewCell {
     
     private lazy var pokemonId: UILabel = {
         let label = UILabel()
-        label.text = "#001"
         label.font = Typography.pokemonIdBold
         label.textColor = UIColor(red: 0.09, green: 0.09, blue: 0.11, alpha: 1.00)
         return label
@@ -70,7 +69,7 @@ final class PokemonListCell: UITableViewCell {
     private lazy var pokemonName: UILabel = {
         let label = UILabel()
         label.font = Typography.pokemonNameBold
-        label.textColor = Colors.white
+        label.textColor = Colors.white.color
         label.text = "Bulbasaur"
         return label
     }()
@@ -102,7 +101,8 @@ final class PokemonListCell: UITableViewCell {
         return stackView
     }()
     
-    func setup() {
+    func setup(pokemon: PokemonModel) {
+        pokemonId.text = "#\(pokemon.id)"
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
