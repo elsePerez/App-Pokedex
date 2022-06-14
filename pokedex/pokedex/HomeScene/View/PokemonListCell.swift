@@ -61,7 +61,7 @@ final class PokemonListCell: UITableViewCell {
     private lazy var pokemonId: UILabel = {
         let label = UILabel()
         label.font = Typography.pokemonIdBold
-        label.textColor = UIColor(red: 0.09, green: 0.09, blue: 0.11, alpha: 1.00)
+        label.textColor = Colors.textNumber.color
         return label
     }()
     
@@ -107,6 +107,7 @@ final class PokemonListCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        pokemonImage.image = nil
         buildView()
     }
     

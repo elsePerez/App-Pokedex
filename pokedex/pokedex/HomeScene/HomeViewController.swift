@@ -103,6 +103,7 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        pokemonsTableView.isHidden = true
         interactor.fetchData()
         buildView()
     }
@@ -204,5 +205,6 @@ extension HomeViewController: UITableViewDataSource {
 extension HomeViewController: HomeViewControllerDisplaying {
     func displayTeste() {
         pokemonsTableView.reloadData()
+        pokemonsTableView.isHidden = false
     }
 }
