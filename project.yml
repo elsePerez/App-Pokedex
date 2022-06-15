@@ -12,7 +12,7 @@ targets:
     sources: pokedex
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.pokedex
+        PRODUCT_BUNDLE_IDENTIFIER: com.pokedexmat
 
 schemes:
   pokedex:

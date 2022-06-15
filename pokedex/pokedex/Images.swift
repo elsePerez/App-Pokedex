@@ -19,6 +19,9 @@ internal typealias AssetImageTypeAlias = ImageAsset.Image
 
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 internal enum Images {
+  internal static let cellBackground = ImageAsset(name: "cellBackground")
+  internal static let cutPokeballBackground = ImageAsset(name: "cutPokeballBackground")
+  internal static let pokeballBackground = ImageAsset(name: "pokeballBackground")
   internal static let bug = ImageAsset(name: "bug")
   internal static let dark = ImageAsset(name: "dark")
   internal static let dragon = ImageAsset(name: "dragon")
@@ -37,13 +40,10 @@ internal enum Images {
   internal static let rock = ImageAsset(name: "rock")
   internal static let steel = ImageAsset(name: "steel")
   internal static let water = ImageAsset(name: "water")
-  internal static let cellBackground = ImageAsset(name: "cellBackground")
-  internal static let cutPokeballBackground = ImageAsset(name: "cutPokeballBackground")
   internal static let filterIcon = ImageAsset(name: "filterIcon")
   internal static let generationIcon = ImageAsset(name: "generationIcon")
-  internal static let pokeballBackground = ImageAsset(name: "pokeballBackground")
   internal static let sortIcon = ImageAsset(name: "sortIcon")
-  internal static let teste1 = ImageAsset(name: "teste1")
+  internal static let searchEmpty = ImageAsset(name: "searchEmpty")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 

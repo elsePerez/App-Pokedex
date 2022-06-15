@@ -5,11 +5,15 @@
 //  Created by Matheus Perez on 24/03/22.
 //
 
+import Lottie
 import UIKit
 import SnapKit
 
 protocol HomeViewControllerDisplaying: AnyObject {
-    func displayTeste()
+    func displayList()
+    func startLoading()
+    func stopLoading()
+    func displayEmptyState()
 }
 
 final class HomeViewController: UIViewController {
@@ -72,9 +76,12 @@ final class HomeViewController: UIViewController {
     private lazy var searchBar: UISearchTextField = {
         let searchBar = UISearchTextField()
         searchBar.backgroundColor = .clear
+        searchBar.keyboardType = .webSearch
+        searchBar.autocorrectionType = .no
         searchBar.textColor = Colors.textGray.color
         searchBar.tintColor = Colors.textGray.color
         searchBar.font = Typography.regular
+        searchBar.delegate = self
         searchBar.placeholder = "What Pokémon are you looking for?"
         return searchBar
     }()
@@ -86,7 +93,9 @@ final class HomeViewController: UIViewController {
         tableView.backgroundColor = .clear
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.keyboardDismissMode = .onDrag
         tableView.register(PokemonListCell.self, forCellReuseIdentifier: PokemonListCell.identifier)
+        tableView.isHidden = true
         return tableView
     }()
     
@@ -98,13 +107,42 @@ final class HomeViewController: UIViewController {
         return stackView
     }()
     
+    private var animationView: AnimationView = {
+        var animation = AnimationView()
+        animation = .init(name: "pokeballLoading")
+        animation.loopMode = .loop
+        animation.animationSpeed = 1.2
+        return animation
+    }()
+    
+    private var emptyStateImage = UIImageView(image: Images.searchEmpty.image)
+    
+    private lazy var emptyStateLabel: UILabel = {
+        let label = UILabel()
+        label.font = Typography.titleBold
+        label.textColor = Colors.textGray.color
+        label.text = "We didn't find your pokemon :("
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        return label
+    }()
+    
+    private lazy var emptyStateStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [emptyStateImage, emptyStateLabel])
+        stackView.axis = .vertical
+        stackView.spacing = Spacing.space2
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.isHidden = true
+        return stackView
+    }()
+    
     override func viewWillLayoutSubviews() {
         setupNavBar()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        pokemonsTableView.isHidden = true
+        startLoading()
         interactor.fetchData()
         buildView()
     }
@@ -148,6 +186,23 @@ extension HomeViewController: ViewSetup {
             $0.leading.equalToSuperview().offset(34)
             $0.trailing.equalToSuperview().offset(-34)
         }
+        
+        animationView.snp.makeConstraints {
+            $0.top.equalTo(searchBar.snp.bottom).offset(140)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(140)
+            $0.height.equalTo(140)
+        }
+        
+        emptyStateImage.snp.makeConstraints {
+            $0.height.equalTo(300)
+        }
+        
+        emptyStateStackView.snp.makeConstraints {
+            $0.top.equalTo(searchBar.snp.bottom).offset(24)
+            $0.leading.equalToSuperview().offset(34)
+            $0.trailing.equalToSuperview().offset(-34)
+        }
     }
     
     func setupHierarchy() {
@@ -155,6 +210,8 @@ extension HomeViewController: ViewSetup {
         view.addSubview(summaryTitleStackView)
         view.addSubview(searchBar)
         view.addSubview(pokemonsTableView)
+        view.addSubview(animationView)
+        view.addSubview(emptyStateStackView)
     }
     
     func setupStyles() {
@@ -174,6 +231,28 @@ private extension HomeViewController {
     
     @objc func sortButtonTapped() {
         view.backgroundColor = .yellow
+    }
+}
+
+// MARK: - UITextFieldDelegate
+extension HomeViewController: UISearchTextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let fieldText = (textField.text ?? "") as NSString
+        let newText = fieldText.replacingCharacters(in: range, with: string)
+        interactor.searchPokemons(pokemonName: newText.lowercased())
+        return true
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        textField.text = ""
+        interactor.searchPokemons(pokemonName: "")
+        view.endEditing(true)
+        return false
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        view.endEditing(true)
+        return true
     }
 }
 
@@ -206,8 +285,25 @@ extension HomeViewController: UITableViewDataSource {
 
 // MARK: - HomeViewControllerDisplaying
 extension HomeViewController: HomeViewControllerDisplaying {
-    func displayTeste() {
+    func displayList() {
+        emptyStateStackView.isHidden = true
         pokemonsTableView.reloadData()
+        stopLoading()
         pokemonsTableView.isHidden = false
+    }
+    
+    func startLoading() {
+        animationView.isHidden = false
+        animationView.play()
+    }
+    
+    func stopLoading() {
+        animationView.isHidden = true
+        animationView.stop()
+    }
+    
+    func displayEmptyState() {
+        emptyStateStackView.isHidden = false
+        pokemonsTableView.isHidden = true
     }
 }

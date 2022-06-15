@@ -7,6 +7,7 @@
 
 protocol HomePresenting: AnyObject {
     func displayList()
+    func displayEmptyState()
 }
 
 final class HomePresenter {
@@ -20,6 +21,10 @@ final class HomePresenter {
 
 extension HomePresenter: HomePresenting {
     func displayList() {
-        viewController?.displayTeste()
+        viewController?.displayList()
+    }
+    
+    func displayEmptyState() {
+        viewController?.displayEmptyState()
     }
 }

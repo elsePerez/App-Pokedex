@@ -9,5 +9,7 @@ target 'pokedex' do
 	pod 'SnapKit'
 	pod 'Alamofire'
 	pod 'Kingfisher'
+	pod 'lottie-ios'
+	pod 'SwiftGoogleTranslate'
 
 end
