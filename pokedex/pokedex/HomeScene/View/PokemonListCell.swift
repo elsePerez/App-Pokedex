@@ -5,6 +5,8 @@
 //  Created by Matheus Perez on 25/03/22.
 //
 
+import Alamofire
+import Kingfisher
 import UIKit
 
 extension PokemonListCell.Layout {
@@ -101,13 +103,12 @@ final class PokemonListCell: UITableViewCell {
         pokemonName.text = pokemon.name
         badgeOne.image = pokemon.primaryType
         badgeTwo.image = pokemon.secondaryType
-        pokemonImage.image = pokemon.image
         rootStackView.backgroundColor = pokemon.backgroundColor
+        pokemonImage.kf.setImage(with: pokemon.url)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        pokemonImage.image = nil
         buildView()
     }
     
@@ -133,7 +134,7 @@ extension PokemonListCell: ViewSetup {
         
         pokemonId.frame = CGRect(x: 30, y: 45, width: 50, height: 14)
     
-        pokemonName.frame = CGRect(x: 30, y: 60, width: 150, height: 32)
+        pokemonName.frame = CGRect(x: 30, y: 60, width: 170, height: 32)
         
         badgeOne.frame = CGRect(x: 30, y: 98, width: 65, height: 25)
 

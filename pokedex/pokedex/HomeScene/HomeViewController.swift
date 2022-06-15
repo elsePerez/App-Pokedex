@@ -74,6 +74,7 @@ final class HomeViewController: UIViewController {
         searchBar.backgroundColor = .clear
         searchBar.textColor = Colors.textGray.color
         searchBar.tintColor = Colors.textGray.color
+        searchBar.font = Typography.regular
         searchBar.placeholder = "What Pokémon are you looking for?"
         return searchBar
     }()
@@ -138,6 +139,7 @@ extension HomeViewController: ViewSetup {
             $0.top.equalTo(summaryTitleStackView.snp.bottom).offset(14)
             $0.leading.equalToSuperview().offset(34)
             $0.trailing.equalToSuperview().offset(-34)
+            $0.height.equalTo(60)
         }
         
         pokemonsTableView.snp.makeConstraints {
@@ -185,13 +187,14 @@ extension HomeViewController: UITableViewDelegate {
 // MARK: - UITableViewDataSource
 extension HomeViewController: UITableViewDataSource {    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        9
+        interactor.getNumberOfRows()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PokemonListCell.identifier, for: indexPath)
-        guard let pokemonCell = cell as? PokemonListCell else { return UITableViewCell()}
-        pokemonCell.setup(pokemon: interactor.getContentCell(index: indexPath))
+        guard let pokemonCell = cell as? PokemonListCell,
+              let content = interactor.getContentCell(index: indexPath) else { return UITableViewCell()}
+        pokemonCell.setup(pokemon: content)
         pokemonCell.selectionStyle = .none
         return cell
     }

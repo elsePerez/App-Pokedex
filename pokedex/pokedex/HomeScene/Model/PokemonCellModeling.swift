@@ -6,17 +6,17 @@
 //
 
 import Alamofire
-import AlamofireImage
 import UIKit
-import SystemConfiguration
 
 struct PokemonCellModeling {
     private let pokemon: PokemonModel
-    private let pokemonImage: UIImage
     
-    init(pokemon: PokemonModel, pokemonImage: UIImage) {
+    init(pokemon: PokemonModel) {
         self.pokemon = pokemon
-        self.pokemonImage = pokemonImage
+    }
+    
+    var url: URL {
+        pokemon.image
     }
     
     var id: String {
@@ -24,7 +24,7 @@ struct PokemonCellModeling {
     }
     
     var name: String {
-        pokemon.name
+        pokemon.name.firstUppercased
     }
     
     var primaryType: UIImage {
@@ -36,10 +36,6 @@ struct PokemonCellModeling {
             return getImageBadge(type: pokemon.types[1])
         }
         return nil
-    }
-    
-    var image: UIImage {
-        pokemonImage
     }
     
     var backgroundColor: UIColor {
