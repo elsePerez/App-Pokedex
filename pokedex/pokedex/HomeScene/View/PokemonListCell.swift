@@ -62,14 +62,14 @@ final class PokemonListCell: UITableViewCell {
     
     private lazy var pokemonId: UILabel = {
         let label = UILabel()
-        label.font = Typography.pokemonIdBold
+        label.font = Typography.secondarySubtitle
         label.textColor = Colors.textNumber.color
         return label
     }()
     
     private lazy var pokemonName: UILabel = {
         let label = UILabel()
-        label.font = Typography.pokemonNameBold
+        label.font = Typography.secondaryTitle
         label.textColor = Colors.white.color
         return label
     }()

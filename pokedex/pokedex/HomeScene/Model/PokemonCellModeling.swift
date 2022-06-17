@@ -2,7 +2,7 @@
 //  PokemonCellModeling.swift
 //  pokedex
 //
-//  Created by Cora on 14/06/22.
+//  Created by Matheus Perez on 14/06/22.
 //
 
 import Alamofire

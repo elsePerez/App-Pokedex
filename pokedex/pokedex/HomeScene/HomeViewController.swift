@@ -57,7 +57,7 @@ final class HomeViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = Typography.titleBold
+        label.font = Typography.primaryTitle
         label.textColor = Colors.black.color
         label.text = "Pokédex"
         label.numberOfLines = 0
@@ -66,7 +66,7 @@ final class HomeViewController: UIViewController {
     
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
-        label.font = Typography.medium
+        label.font = Typography.primarySubtitle
         label.textColor = Colors.textGray.color
         label.text = "Search for Pokémon by name or using the National Pokédex number."
         label.numberOfLines = 0
@@ -80,7 +80,7 @@ final class HomeViewController: UIViewController {
         searchBar.autocorrectionType = .no
         searchBar.textColor = Colors.textGray.color
         searchBar.tintColor = Colors.textGray.color
-        searchBar.font = Typography.regular
+        searchBar.font = Typography.primarySubtitle
         searchBar.delegate = self
         searchBar.placeholder = "What Pokémon are you looking for?"
         return searchBar
@@ -119,7 +119,7 @@ final class HomeViewController: UIViewController {
     
     private lazy var emptyStateLabel: UILabel = {
         let label = UILabel()
-        label.font = Typography.titleBold
+        label.font = Typography.primaryTitle
         label.textColor = Colors.textGray.color
         label.text = "We didn't find your pokemon :("
         label.textAlignment = .center
@@ -134,6 +134,13 @@ final class HomeViewController: UIViewController {
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.isHidden = true
         return stackView
+    }()
+    
+    private lazy var blurView: UIVisualEffectView = {
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.isHidden = true
+        return blurView
     }()
     
     override func viewWillLayoutSubviews() {
@@ -203,6 +210,10 @@ extension HomeViewController: ViewSetup {
             $0.leading.equalToSuperview().offset(34)
             $0.trailing.equalToSuperview().offset(-34)
         }
+        
+        blurView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
     
     func setupHierarchy() {
@@ -212,6 +223,7 @@ extension HomeViewController: ViewSetup {
         view.addSubview(pokemonsTableView)
         view.addSubview(animationView)
         view.addSubview(emptyStateStackView)
+        view.addSubview(blurView)
     }
     
     func setupStyles() {
@@ -230,7 +242,10 @@ private extension HomeViewController {
     }
     
     @objc func sortButtonTapped() {
-        view.backgroundColor = .yellow
+        UIView.transition(with: self.view, duration: 0.2, options: .transitionCrossDissolve, animations: {
+            self.blurView.isHidden = false
+            self.interactor.showFilter(delegate: self)
+        }, completion: nil)
     }
 }
 
@@ -261,6 +276,20 @@ extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("CLICOU \(indexPath.row)")
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.transform = CGAffineTransform(translationX: 0, y: cell.frame.height / 2)
+        cell.alpha = 0
+
+        UIView.animate(
+            withDuration: 0.4,
+            delay: 0.01 * Double(indexPath.row),
+            options: [.curveEaseInOut],
+            animations: {
+                cell.transform = CGAffineTransform(translationX: 0, y: 0)
+                cell.alpha = 1
+        })
+    }
 }
 
 // MARK: - UITableViewDataSource
@@ -288,12 +317,15 @@ extension HomeViewController: HomeViewControllerDisplaying {
     func displayList() {
         emptyStateStackView.isHidden = true
         pokemonsTableView.reloadData()
+        pokemonsTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
         stopLoading()
         pokemonsTableView.isHidden = false
     }
     
     func startLoading() {
         animationView.isHidden = false
+        pokemonsTableView.isHidden = true
+        emptyStateStackView.isHidden = true
         animationView.play()
     }
     
@@ -305,5 +337,15 @@ extension HomeViewController: HomeViewControllerDisplaying {
     func displayEmptyState() {
         emptyStateStackView.isHidden = false
         pokemonsTableView.isHidden = true
+    }
+}
+
+extension HomeViewController: SortViewDelegate {
+    func didClickFilter(sortType: SortFilter) {
+        UIView.transition(with: self.view, duration: 0.4, options: .transitionCrossDissolve, animations: {
+            self.blurView.isHidden = true
+        }, completion: nil)
+        
+        interactor.getSortFilter(sortFilterType: sortType)
     }
 }

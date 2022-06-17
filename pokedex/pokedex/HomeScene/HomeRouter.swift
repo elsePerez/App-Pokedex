@@ -8,7 +8,7 @@
 import UIKit
 
 protocol HomeRoutering: AnyObject {
-    func routerToTest()
+    func routerToSortFilter(sortFilterType: SortFilter, delegate: SortViewDelegate)
 }
 
 final class HomeRouter {
@@ -17,7 +17,15 @@ final class HomeRouter {
 
 // MARK: - HomeRoutering
 extension HomeRouter: HomeRoutering {
-    func routerToTest() {
-        
+    func routerToSortFilter(sortFilterType: SortFilter, delegate: SortViewDelegate) {
+        let filter = SortViewController(filterSelected: sortFilterType)
+        filter.delegate = delegate
+        let nav = UINavigationController(rootViewController: filter)
+        nav.modalPresentationStyle = .pageSheet
+        if let sheet = nav.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
+        viewController?.present(nav, animated: true, completion: nil)
     }
 }

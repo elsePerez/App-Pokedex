@@ -6,21 +6,55 @@
 //
 import Alamofire
 import SwiftGoogleTranslate
+import Foundation
 
 protocol HomeInteracting: AnyObject {
     func fetchData()
     func getNumberOfRows() -> Int
     func getContentCell(index: IndexPath) -> PokemonCellModeling?
     func searchPokemons(pokemonName: String)
+    func getSortFilter(sortFilterType: SortFilter)
+    func showFilter(delegate: SortViewDelegate)
 }
 
 final class HomeInteractor {
     private let presenter: HomePresenting
     private var pokemonsList = [PokemonModel]()
     private var pokemonsFilter = [PokemonModel]()
+    private var sortFilterType: SortFilter?
     
     init(presenter: HomePresenting) {
         self.presenter = presenter
+    }
+}
+
+private extension HomeInteractor {
+    func sortFilterSmallest() {
+        guard pokemonsFilter[0].id == 1 else {
+            presenter.startLoading()
+            pokemonsFilter.reverse()
+            Timer.scheduledTimer(timeInterval: 0.5,
+                                 target: self,
+                                 selector: #selector(timerAction),
+                                 userInfo: nil,
+                                 repeats: false)
+            return
+        }
+    }
+    
+    func sortFilterHighest() {
+        guard pokemonsFilter[0].id == 1 else { return }
+        presenter.startLoading()
+        pokemonsFilter.reverse()
+        Timer.scheduledTimer(timeInterval: 0.5,
+                             target: self,
+                             selector: #selector(timerAction),
+                             userInfo: nil,
+                             repeats: false)
+    }
+    
+    @objc func timerAction(){
+        presenter.displayList()
     }
 }
 
@@ -67,5 +101,24 @@ extension HomeInteractor: HomeInteracting {
         } else {
             presenter.displayList()
         }
+    }
+    
+    func getSortFilter(sortFilterType: SortFilter) {
+        self.sortFilterType = sortFilterType
+        switch sortFilterType {
+        case .sortSmallest:
+            sortFilterSmallest()
+        case .sortHighest:
+            sortFilterHighest()
+        case .sortAZ:
+            print("B")
+        case .sortZA:
+            print("C")
+        }
+    }
+    
+    func showFilter(delegate: SortViewDelegate) {
+        presenter.coordinateToSortFilter(sortFilterType: self.sortFilterType ?? .sortSmallest,
+                                         delegate: delegate)
     }
 }

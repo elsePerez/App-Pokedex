@@ -8,6 +8,8 @@
 protocol HomePresenting: AnyObject {
     func displayList()
     func displayEmptyState()
+    func startLoading()
+    func coordinateToSortFilter(sortFilterType: SortFilter, delegate: SortViewDelegate)
 }
 
 final class HomePresenter {
@@ -26,5 +28,13 @@ extension HomePresenter: HomePresenting {
     
     func displayEmptyState() {
         viewController?.displayEmptyState()
+    }
+    
+    func startLoading() {
+        viewController?.startLoading()
+    }
+    
+    func coordinateToSortFilter(sortFilterType: SortFilter, delegate: SortViewDelegate) {
+        router.routerToSortFilter(sortFilterType: sortFilterType, delegate: delegate)
     }
 }

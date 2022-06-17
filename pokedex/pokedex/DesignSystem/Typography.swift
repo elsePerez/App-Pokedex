@@ -7,15 +7,24 @@
 
 import UIKit
 
-enum Typography {
-    
-    static let titleBold = UIFont.systemFont(ofSize: 32, weight: UIFont.Weight.bold)
-    
-    static let pokemonNameBold = UIFont.systemFont(ofSize: 26, weight: UIFont.Weight.bold)
-    
-    static let pokemonIdBold = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.bold)
-    
-    static let medium = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.light)
+fileprivate enum FontName {
+    static let bold = "SF Pro Display Bold"
+    static let regular = "SF Pro Display Regular"
+}
 
-    static let regular = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
+enum Typography {
+    /// Bold 32
+    static let primaryTitle = UIFont(name: FontName.bold, size: 32)
+    
+    /// Bold 26
+    static let secondaryTitle = UIFont(name: FontName.bold, size: 26)
+    
+    /// Bold 16
+    static let tertiaryTitle = UIFont(name: FontName.bold, size: 16)
+    
+    /// Regular 16
+    static let primarySubtitle = UIFont(name: FontName.regular, size: 16)
+    
+    /// Regular 12
+    static let secondarySubtitle = UIFont(name: FontName.regular, size: 12)
 }
